@@ -1,12 +1,19 @@
 #!/usr/bin/env bash
 # localhost-u 127.0.0.2-yə, facebook.com-u isə 8.8.8.8-ə yönləndirir
 
-# localhost sətirlərini yeniləyirik
-sudo sed -i 's/127.0.0.1 localhost/127.0.0.2 localhost/g' /etc/hosts
+# /etc/hosts faylının içindəkiləri dəyişib müvəqqəti fayla yazırıq
+sed 's/127.0.0.1 localhost/127.0.0.2 localhost/g' /etc/hosts > /tmp/hosts_temp
 
 # facebook.com yoxdursa əlavə edirik, varsa IP-sini dəyişirik
-if grep -q "facebook.com" /etc/hosts; then
-    sudo sed -i 's/.*facebook.com/8.8.8.8 facebook.com/g' /etc/hosts
+if grep -q "facebook.com" /tmp/hosts_temp; then
+    sed -i 's/.*facebook.com/8.8.8.8 facebook.com/g' /tmp/hosts_temp
 else
-    echo "8.8.8.8 facebook.com" | sudo tee -a /etc/hosts > /dev/null
+    echo "8.8.8.8 facebook.com" >> /tmp/hosts_temp
 fi
+
+# Müvəqqəti faylın məzmununu birbaşa /etc/hosts faylının üzərinə yazırıq
+# Bu üsul "Device or resource busy" xətasının qarşısını alır
+cat /tmp/hosts_temp > /etc/hosts
+
+# Müvəqqəti faylı silirik
+rm /tmp/hosts_temp
