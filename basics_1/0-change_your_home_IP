@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
-# Configure localhost and facebook.com resolution
+# localhost-u 127.0.0.2-yə, facebook.com-u isə 8.8.8.8-ə yönləndirir
 
-echo "127.0.0.2 localhost" > /etc/hosts
-echo "8.8.8.8 facebook.com" >> /etc/hosts
+# localhost sətirlərini yeniləyirik
+sudo sed -i 's/127.0.0.1 localhost/127.0.0.2 localhost/g' /etc/hosts
+
+# facebook.com yoxdursa əlavə edirik, varsa IP-sini dəyişirik
+if grep -q "facebook.com" /etc/hosts; then
+    sudo sed -i 's/.*facebook.com/8.8.8.8 facebook.com/g' /etc/hosts
+else
+    echo "8.8.8.8 facebook.com" | sudo tee -a /etc/hosts > /dev/null
+fi
