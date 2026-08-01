@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-# Aktiv IPv4 ünvanlarını ifconfig vasitəsilə göstərir
-
-ifconfig | grep -oP '(?<=inet\s)\d+(\.\d+){3}'
